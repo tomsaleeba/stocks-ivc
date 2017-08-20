@@ -1,0 +1,8 @@
+<div class="form-group">
+  <label for="{{ivcConfig.id}}" class="col-sm-4 control-label">{{ivcConfig.title}}</label>
+  <div class="input-group">
+    <div class="input-group-addon">{{ivcConfig.units}}</div>
+    <input type="number" class="form-control" id="{{ivcConfig.id}}" ng-model="ivcModel" ng-change="ivcConfig.callback()">
+  </div>
+  <span id="helpBlock" class="help-block col-sm-offset-4">{{ivcConfig.tip}}</span>
+</div>

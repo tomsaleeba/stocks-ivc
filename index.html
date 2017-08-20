@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Cost calculator for 24hrs of LeMons Australia</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+
+<body ng-app="ivc">
+  <div class="jumbotron">
+    <div class="container">
+      <h2>Intrinsic Value Calculator for stocks</h2>
+      <p>FIXME add message</p>
+    </div>
+  </div>
+
+  <div class="container" ng-controller="TheController">
+    <div class="row">
+      <div class="col-md-6">
+        <h2>Inputs</h2>
+        <form class="form-horizontal">
+          <ivc-input ivc-model="annualDividends" ivc-config="annualDividendsConfig"></ivc-input>
+          <ivc-input ivc-model="frankingPercentage" ivc-config="frankingPercentageConfig"></ivc-input>
+        </form>
+      </div>
+      <div class="col-md-6">
+        <h2>Working</h2>
+        <table class="table table-striped">
+          <tbody>
+            <tr>
+              <th>Grossed-up dividends</th>
+              <td>{{grossedUpDivs}}c</td>
+            </tr>
+          </tbody>
+        </table>
+        <p>TODO add more workings</p>
+        <h2>Results</h2>
+        <p>TODO add result numbers</p>
+        <p>TODO add result chart</p>
+      </div>
+    </div>
+
+    <hr>
+
+    <footer>
+      <p class="text-center">&copy; Tom Saleeba 2017 <a href="https://twitter.com/techotom">@techotom</a></p>
+    </footer>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.min.js"></script>
+  <script src="app.js"></script>
+  <script>
+    (function (i, s, o, g, r, a, m) {
+    i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+      (i[r].q = i[r].q || []).push(arguments)
+    }, i[r].l = 1 * new Date(); a = s.createElement(o),
+      m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-101335262-3', 'auto');
+    ga('send', 'pageview');
+  </script>
+</body>
+
+</html>
