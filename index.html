@@ -7,13 +7,19 @@
   <title>Cost calculator for 24hrs of LeMons Australia</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+  <style type="text/css">
+    .main-value {
+      font-size: 2em;
+      font-weight: bold;
+    }
+  </style>
 </head>
 
 <body ng-app="ivc">
   <div class="jumbotron">
     <div class="container">
       <h2>Intrinsic Value Calculator for stocks</h2>
-      <p>FIXME add message</p>
+      <p>An online calculator version of the excellent guide written by <a href="http://www.clime.com.au/articles/demystifying-intrinsic-value-step-by-step/">clime</a>.</p>
     </div>
   </div>
 
@@ -27,6 +33,13 @@
           <ivc-input ivc-model="retainedEarnings" ivc-config="retainedEarningsConfig"></ivc-input>
           <ivc-input ivc-model="changeInReserves" ivc-config="changeInReservesConfig"></ivc-input>
           <ivc-input ivc-model="abnormals" ivc-config="abnormalsConfig"></ivc-input>
+          <ivc-input ivc-model="openingEquity" ivc-config="openingEquityConfig"></ivc-input>
+          <ivc-input ivc-model="newNetOrdinaryEquity" ivc-config="newNetOrdinaryEquityConfig"></ivc-input>
+          <ivc-input ivc-model="requiredReturn" ivc-config="requiredReturnConfig"></ivc-input>
+          <ivc-input ivc-model="closingEquity" ivc-config="closingEquityConfig"></ivc-input>
+          <ivc-input ivc-model="outstandingShares" ivc-config="outstandingSharesConfig"></ivc-input>
+          <ivc-input ivc-model="currentSharePrice" ivc-config="currentSharePriceConfig"></ivc-input>
+          <ivc-input ivc-model="purchasedPrice" ivc-config="purchasedPriceConfig"></ivc-input>
         </form>
       </div>
       <div class="col-md-6">
@@ -35,17 +48,67 @@
           <tbody>
             <tr>
               <th>Grossed-up dividends</th>
-              <td>{{grossedUpDivs | number:2}}c</td>
+              <td>M${{grossedUpDivs | number:2}}</td>
             </tr>
             <tr>
               <th>Normalised earnings</th>
-              <td>{{normalisedEarnings | number:2}}? cents per share TODO</td>
+              <td>M${{normalisedEarnings | number:2}}</td>
+            </tr>
+            <tr>
+              <th>Net return on equity (NROE)</th>
+              <td>{{nroe * 100 | number:2}}%</td>
+            </tr>
+            <tr>
+              <th>Payout ratio</th>
+              <td>{{payoutRatio | number:4}}</td>
+            </tr>
+            <tr>
+              <th>Payout ratio (percentage)</th>
+              <td>{{payoutRatioPercentage | number:2}}%</td>
+            </tr>
+            <tr>
+              <th>Bond component</th>
+              <td>{{bondComponent | number:2}}</td>
+            </tr>
+            <tr>
+              <th>Growth component</th>
+              <td>{{growthComponent | number:2}}</td>
+            </tr>
+            <tr>
+              <th>Adjusted bond component</th>
+              <td>{{adjustedBondComponent | number:2}}</td>
+            </tr>
+            <tr>
+              <th>Adjusted growth component</th>
+              <td>{{adjustedGrowthComponent | number:2}}</td>
+            </tr>
+            <tr>
+              <th>Equity multiplier</th>
+              <td>{{equityMultiplier | number:2}}</td>
+            </tr>
+            <tr>
+              <th>Equity per share</th>
+              <td>${{equityPerShare | number:2}}</td>
             </tr>
           </tbody>
         </table>
-        <p>TODO add more workings</p>
         <h2>Results</h2>
-        <p>TODO add result numbers</p>
+        <table class="table table-striped">
+          <tbody>
+            <tr class="main-value">
+              <th>Intrinsic value</th>
+              <td>${{intrinsicValue | number:2}}</td>
+            </tr>
+            <tr>
+              <th>Current margin of safety</th>
+              <td>{{currentMarginOfSafety * 100 | number:2}}%</td>
+            </tr>
+            <tr>
+              <th>Purchased margin of safety</th>
+              <td>{{purchasedMarginOfSafety * 100 | number:2}}%</td>
+            </tr>
+          </tbody>
+        </table>
         <p>TODO add result chart</p>
       </div>
     </div>
