@@ -24,6 +24,9 @@
         <form class="form-horizontal">
           <ivc-input ivc-model="annualDividends" ivc-config="annualDividendsConfig"></ivc-input>
           <ivc-input ivc-model="frankingPercentage" ivc-config="frankingPercentageConfig"></ivc-input>
+          <ivc-input ivc-model="retainedEarnings" ivc-config="retainedEarningsConfig"></ivc-input>
+          <ivc-input ivc-model="changeInReserves" ivc-config="changeInReservesConfig"></ivc-input>
+          <ivc-input ivc-model="abnormals" ivc-config="abnormalsConfig"></ivc-input>
         </form>
       </div>
       <div class="col-md-6">
@@ -32,7 +35,11 @@
           <tbody>
             <tr>
               <th>Grossed-up dividends</th>
-              <td>{{grossedUpDivs}}c</td>
+              <td>{{grossedUpDivs | number:2}}c</td>
+            </tr>
+            <tr>
+              <th>Normalised earnings</th>
+              <td>{{normalisedEarnings | number:2}}? cents per share TODO</td>
             </tr>
           </tbody>
         </table>
