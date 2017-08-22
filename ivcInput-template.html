@@ -1,8 +1,9 @@
 <div class="form-group">
-  <label for="{{theId}}" class="col-sm-4 control-label">{{ivcConfig.title}}</label>
+  <label for="{{theId}}" class="col-sm-5 control-label">{{ivcConfig.title}}</label>
   <div class="input-group">
-    <div class="input-group-addon">{{ivcConfig.units}}</div>
+    <div class="input-group-addon" ng-if="ivcConfig.unitsPrefix">{{ivcConfig.unitsPrefix}}</div>
     <input type="number" class="form-control" id="{{theId}}" ng-model="ivcModel" ng-change="ivcConfig.callback()">
+    <div class="input-group-addon" ng-if="ivcConfig.unitsSuffix">{{ivcConfig.unitsSuffix}}</div>
   </div>
-  <span id="helpBlock" class="help-block col-sm-offset-4">{{ivcConfig.tip}}</span>
+  <span id="helpBlock" class="help-block col-sm-offset-5">{{ivcConfig.tip}}</span>
 </div>

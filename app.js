@@ -20,85 +20,92 @@ app.controller('TheController', function ($scope) {
   $scope.annualDividends = 2.722
   $scope.annualDividendsConfig = {
     title: 'Annual dividends',
-    units: '$M',
-    tip: 'Total dividends paid for the FY millions of AUD',
+    unitsPrefix: '$',
+    unitsSuffix: 'million',
+    tip: 'Total dividends paid for the FY in millions of AUD',
     callback: doCalc
   }
   $scope.frankingPercentage = 100
   $scope.frankingPercentageConfig = {
     title: 'Franking percentage',
-    units: '%',
-    tip: 'TODO',
+    unitsSuffix: '%',
+    tip: 'The percentage of the dividend that is franked',
     callback: doCalc
   }
   $scope.retainedEarnings = 10.724
   $scope.retainedEarningsConfig = {
-    title: 'Retained earnings',
-    units: '$M',
-    tip: 'TODO',
+    title: 'Retained earnings/profits',
+    unitsPrefix: '$',
+    unitsSuffix: 'million',
+    tip: 'How much did the business keep at the EOFY',
     callback: doCalc
   }
   $scope.changeInReserves = 3.253
   $scope.changeInReservesConfig = {
     title: 'Change in reserves',
-    units: '$M',
-    tip: 'TODO',
+    unitsPrefix: '$',
+    unitsSuffix: 'million',
+    tip: "How much did the business' stock pile of cash change over the FY",
     callback: doCalc
   }
   $scope.abnormals = 1.3
   $scope.abnormalsConfig = {
     title: 'Abnormals',
-    units: '$M',
-    tip: 'TODO',
+    unitsPrefix: '$',
+    unitsSuffix: 'million',
+    tip: "One off costs that business incurred this year but doesn't expect to be recurring",
     callback: doCalc
   }
   $scope.openingEquity = 48.911
   $scope.openingEquityConfig = {
     title: 'Opening equity',
-    units: '$M',
-    tip: 'TODO',
+    unitsPrefix: '$',
+    unitsSuffix: 'million',
+    tip: 'How much equity was on the market at the start of the FY',
     callback: doCalc
   }
   $scope.newNetOrdinaryEquity = 0.323
   $scope.newNetOrdinaryEquityConfig = {
     title: 'New net ordinary equity',
-    units: '$M',
-    tip: 'TODO',
+    unitsPrefix: '$',
+    unitsSuffix: 'million',
+    tip: 'How much new equity (in millions of AUD) was issued during the FY',
     callback: doCalc
   }
   $scope.requiredReturn = 9
   $scope.requiredReturnConfig = {
     title: 'Required return',
-    units: '%',
-    tip: 'TODO',
+    unitsSuffix: '%',
+    tip: 'What return do you require from your investment. You make this number up yourself',
     callback: doCalc
   }
   $scope.closingEquity = 63.211
   $scope.closingEquityConfig = {
     title: 'Closing equity',
-    units: '$M',
-    tip: 'TODO',
+    unitsPrefix: '$',
+    unitsSuffix: 'million',
+    tip: 'How much equity was on the market at the EOFY',
     callback: doCalc
   }
   $scope.outstandingShares = 96634354
   $scope.outstandingSharesConfig = {
     title: 'Outstanding shares',
-    units: '',
-    tip: 'TODO',
+    unitsSuffix: 'shares',
+    tip: 'How many shares were on the market at the EOFY (also called "issued capital")',
     callback: doCalc
   }
   $scope.currentSharePrice = 10.29
   $scope.currentSharePriceConfig = {
     title: 'Current share price',
-    units: '$',
-    tip: 'TODO',
+    unitsPrefix: '$',
+    tip: 'How much is the share price right now',
     callback: doCalc
   }
   $scope.purchasedPrice = 12.44
   $scope.purchasedPriceConfig = {
     title: 'Purchased share price',
-    units: '$',
-    tip: 'TODO',
+    unitsPrefix: '$',
+    tip: "If you've purchased this stock, what is your (average) purchase price",
     callback: doCalc
   }
   $scope.doCalc = doCalc
