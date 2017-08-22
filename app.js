@@ -16,6 +16,8 @@ app.controller('TheController', function ($scope) {
     $scope.intrinsicValue = $scope.equityMultiplier * $scope.equityPerShare
     $scope.currentMarginOfSafety = ($scope.intrinsicValue - $scope.currentSharePrice) / $scope.intrinsicValue
     $scope.purchasedMarginOfSafety = ($scope.intrinsicValue - $scope.purchasedPrice) / $scope.intrinsicValue
+    $scope.isCurrentMarginOfSafetyPositive = $scope.currentMarginOfSafety > 0
+    $scope.isPurchasedMarginOfSafetyPositive = $scope.purchasedMarginOfSafety > 0
   }
   $scope.annualDividends = 2.722
   $scope.annualDividendsConfig = {

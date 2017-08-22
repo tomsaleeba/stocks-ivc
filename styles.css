@@ -1,0 +1,17 @@
+.main-value {
+  font-size: 2em;
+  font-weight: bold;
+}
+
+.input-group .form-control:first-child:not(:last-child), .input-group-addon:first-child:not(:last-child), .input-group-btn:first-child:not(:last-child) {
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+
+.good-result {
+  background-color: #C1FFC1;
+}
+
+.bad-result {
+  background-color: #FFCCCC;
+}
