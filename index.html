@@ -14,16 +14,16 @@
 <body ng-app="ivc">
   <div class="jumbotron">
     <div class="container">
-      <h2>Intrinsic Value Calculator for stocks</h2>
+      <h1>Intrinsic Value Calculator for stocks</h1>
       <p>An online calculator version of the excellent guide written by <a href="http://www.clime.com.au/articles/demystifying-intrinsic-value-step-by-step/">clime</a>.</p>
       <p>
         I've written a guide on how to find the required data:
-        <a href="https://github.com/tomsaleeba/stocks-ivc/blob/master/finding-the-data/README.md" target="_blank" class="btn btn-lg btn-info">
+        <a href="https://github.com/tomsaleeba/stocks-ivc/blob/master/finding-the-data/README.md" target="_blank" class="btn btn-lg btn-success">
           <span class="glyphicon glyphicon-question-sign"></span>
-          View the 'how to find the data' guide
+          Finding the required data
         </a>
       </p>
-      <p><small>Disclaimer: I've just made the tool. Make your own financial decisions on the data it gives you.</small></p>
+      <p><small>Disclaimer: This calculator has no brain, you need to use yours.</small></p>
     </div>
   </div>
 
@@ -101,19 +101,24 @@
           <tbody>
             <tr class="main-value">
               <th>Intrinsic value</th>
-              <td>${{intrinsicValue | number:2}}</td>
+              <td ng-show="isInputValid()">${{intrinsicValue | number:2}}</td>
+              <td ng-hide="isInputValid()">$-.--</td>
             </tr>
             <tr>
               <th>Current margin of safety</th>
-              <td ng-class="{'good-result': isCurrentMarginOfSafetyPositive, 'bad-result': !isCurrentMarginOfSafetyPositive}">
+              <td ng-show="isInputValid()"
+                  ng-class="{'good-result': isCurrentMarginOfSafetyPositive, 'bad-result': !isCurrentMarginOfSafetyPositive}">
                 {{currentMarginOfSafety * 100 | number:2}}%
               </td>
+              <td ng-hide="isInputValid()">--%</td>
             </tr>
             <tr>
               <th>Purchased margin of safety</th>
-              <td ng-class="{'good-result': isPurchasedMarginOfSafetyPositive, 'bad-result': !isPurchasedMarginOfSafetyPositive}">
+              <td ng-show="isInputValid()"
+                  ng-class="{'good-result': isPurchasedMarginOfSafetyPositive, 'bad-result': !isPurchasedMarginOfSafetyPositive}">
                 {{purchasedMarginOfSafety * 100 | number:2}}%
               </td>
+              <td ng-hide="isInputValid()">--%</td>
             </tr>
           </tbody>
         </table>
