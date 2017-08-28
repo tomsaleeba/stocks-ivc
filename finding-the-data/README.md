@@ -84,4 +84,4 @@ This example is super simple because both dividends were 100% franked so the ove
 
 # What next?
 
-Now you know how to get all the data, go grab the annual report for your company of choice and get calculating. Jump back to the calculator [https://ivc.techotom.com]()
+Now you know how to get all the data, go grab the annual report for your company of choice and get calculating. Jump back to the calculator [https://ivc.techotom.com](https://ivc.techotom.com)
