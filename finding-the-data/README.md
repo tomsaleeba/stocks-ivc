@@ -81,3 +81,7 @@ It's note 18 here. So we'll scroll down to see note 18:
 ![franking percentage in note 18](franking-note.png)
 
 This example is super simple because both dividends were 100% franked so the overall figure is 100%. I'm not sure exactly how to figure out the final number if you had two different franking percentages for dividends but I suspect it'll be based on a weighted average. I'll update this when I see an example requiring it.
+
+# What next?
+
+Now you know how to get all the data, go grab the annual report for your company of choice and get calculating. Jump back to the calculator [https://ivc.techotom.com]()
