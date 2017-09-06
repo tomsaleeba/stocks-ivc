@@ -15,3 +15,10 @@
 .bad-result {
   background-color: #FFCCCC;
 }
+
+.result-container {
+  border: 2px solid black;
+  padding: 0 1em;
+  border-radius: 10px;
+  background-color: #EEE;
+}

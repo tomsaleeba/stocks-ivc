@@ -23,6 +23,14 @@
           Finding the required data
         </a>
       </p>
+      <p><small>
+        Got feedback? I'd love to hear it.
+        <a href="https://www.surveymonkey.com/r/C5ZWLNF" target="_blank" class="btn btn-info">
+          <span class="glyphicon glyphicon-bullhorn"></span>
+          Give feedback
+        </a>
+        </small>
+      </p>
       <p><small>Disclaimer: This calculator has no brain, you need to use yours.</small></p>
     </div>
   </div>
@@ -96,32 +104,34 @@
             </tr>
           </tbody>
         </table>
-        <h2>Results</h2>
-        <table class="table table-striped">
-          <tbody>
-            <tr class="main-value">
-              <th>Intrinsic value</th>
-              <td ng-show="isInputValid()">${{intrinsicValue | number:2}}</td>
-              <td ng-hide="isInputValid()">$-.--</td>
-            </tr>
-            <tr>
-              <th>Current margin of safety</th>
-              <td ng-show="isInputValid()"
-                  ng-class="{'good-result': isCurrentMarginOfSafetyPositive, 'bad-result': !isCurrentMarginOfSafetyPositive}">
-                {{currentMarginOfSafety * 100 | number:2}}%
-              </td>
-              <td ng-hide="isInputValid()">--%</td>
-            </tr>
-            <tr>
-              <th>Purchased margin of safety</th>
-              <td ng-show="isInputValid()"
-                  ng-class="{'good-result': isPurchasedMarginOfSafetyPositive, 'bad-result': !isPurchasedMarginOfSafetyPositive}">
-                {{purchasedMarginOfSafety * 100 | number:2}}%
-              </td>
-              <td ng-hide="isInputValid()">--%</td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="result-container">
+          <h2>Results</h2>
+          <table class="table table-striped">
+            <tbody>
+              <tr class="main-value">
+                <th>Intrinsic value</th>
+                <td ng-show="isInputValid()">${{intrinsicValue | number:2}}</td>
+                <td ng-hide="isInputValid()">$-.--</td>
+              </tr>
+              <tr>
+                <th>Current margin of safety</th>
+                <td ng-show="isInputValid()"
+                    ng-class="{'good-result': isCurrentMarginOfSafetyPositive, 'bad-result': !isCurrentMarginOfSafetyPositive}">
+                  {{currentMarginOfSafety * 100 | number:2}}%
+                </td>
+                <td ng-hide="isInputValid()">--%</td>
+              </tr>
+              <tr>
+                <th>Purchased margin of safety</th>
+                <td ng-show="isInputValid()"
+                    ng-class="{'good-result': isPurchasedMarginOfSafetyPositive, 'bad-result': !isPurchasedMarginOfSafetyPositive}">
+                  {{purchasedMarginOfSafety * 100 | number:2}}%
+                </td>
+                <td ng-hide="isInputValid()">--%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
         <!-- <p>TODO add result chart</p> -->
       </div>
     </div>
