@@ -1,4 +1,4 @@
-var app = angular.module('ivc', [])
+var app = angular.module('ivc', ['angularDc'])
 
 app.controller('TheController', function ($scope) {
   $scope.isInputValid = function () {
@@ -24,26 +24,128 @@ app.controller('TheController', function ($scope) {
       isNumGtZero($scope.currentSharePrice) &&
       isNumGtZero($scope.purchasedPrice)
   }
+  $scope.getIntrinsicValue = function () {
+    return getValueForHoveredRR('intrinsicValue')
+  }
+  $scope.getCurrentMarginOfSafety = function () {
+    return getValueForHoveredRR('currentMarginOfSafety')
+  }
+  $scope.getPurchasedMarginOfSafety = function () {
+    return getValueForHoveredRR('purchasedMarginOfSafety')
+  }
+  $scope.isCurrentMarginOfSafetyPositive = function () {
+    return $scope.getCurrentMarginOfSafety() > 0
+  }
+  $scope.isPurchasedMarginOfSafetyPositive = function () {
+    return $scope.getPurchasedMarginOfSafety() > 0
+  }
+  function getValueForHoveredRR (fieldName) {
+    if (!$scope.resultRecords) {
+      return 0
+    }
+    return $scope.indexedRecords[$scope.hoveredRequiredReturn][fieldName]
+  }
   function doCalc () {
     if (!$scope.isInputValid) {
+      // TODO do we need to reset everything?
       return
     }
-    $scope.grossedUpDivs = $scope.annualDividends / (1 - ($scope.frankingPercentage / 100) * 0.3)
-    $scope.normalisedEarnings = $scope.grossedUpDivs + $scope.retainedEarnings + $scope.changeInReserves - $scope.abnormals
-    $scope.nroe = $scope.normalisedEarnings / ($scope.openingEquity + ($scope.newNetOrdinaryEquity/2))
-    $scope.payoutRatio = $scope.grossedUpDivs / $scope.normalisedEarnings
-    $scope.payoutRatioPercentage = $scope.payoutRatio * 100
-    $scope.bondComponent = $scope.nroe / ($scope.requiredReturn / 100)
-    $scope.growthComponent = (Math.pow($scope.nroe, 2)) / (Math.pow(($scope.requiredReturn / 100), 2))
-    $scope.adjustedBondComponent = $scope.bondComponent * $scope.payoutRatio
-    $scope.adjustedGrowthComponent = $scope.growthComponent * (1 - $scope.payoutRatio)
-    $scope.equityMultiplier = $scope.adjustedBondComponent + $scope.adjustedGrowthComponent
-    $scope.equityPerShare = $scope.closingEquity * 1000000 / $scope.outstandingShares
-    $scope.intrinsicValue = $scope.equityMultiplier * $scope.equityPerShare
-    $scope.currentMarginOfSafety = ($scope.intrinsicValue - $scope.currentSharePrice) / $scope.intrinsicValue
-    $scope.purchasedMarginOfSafety = ($scope.intrinsicValue - $scope.purchasedPrice) / $scope.intrinsicValue
-    $scope.isCurrentMarginOfSafetyPositive = $scope.currentMarginOfSafety > 0
-    $scope.isPurchasedMarginOfSafetyPositive = $scope.purchasedMarginOfSafety > 0
+    var records = []
+    $scope.resultRecords = records
+    var indexedRecords = {}
+    $scope.indexedRecords = indexedRecords
+    var maxRequiredReturnFigure = 20
+    for (var i = 3; i <= maxRequiredReturnFigure; i++) {
+      calcForRR(i)
+    }
+    function calcForRR (requiredReturn) {
+      grossedUpDivs = $scope.annualDividends / (1 - ($scope.frankingPercentage / 100) * 0.3)
+      normalisedEarnings = grossedUpDivs + $scope.retainedEarnings + $scope.changeInReserves - $scope.abnormals
+      nroe = normalisedEarnings / ($scope.openingEquity + ($scope.newNetOrdinaryEquity/2))
+      payoutRatio = grossedUpDivs / normalisedEarnings
+      bondComponent = nroe / (requiredReturn / 100)
+      growthComponent = (Math.pow(nroe, 2)) / (Math.pow((requiredReturn / 100), 2))
+      adjustedBondComponent = bondComponent * payoutRatio
+      adjustedGrowthComponent = growthComponent * (1 - payoutRatio)
+      equityMultiplier = adjustedBondComponent + adjustedGrowthComponent
+      equityPerShare = $scope.closingEquity * 1000000 / $scope.outstandingShares
+      intrinsicValue = equityMultiplier * equityPerShare
+      currentMarginOfSafety = (intrinsicValue - $scope.currentSharePrice) / intrinsicValue
+      purchasedMarginOfSafety = (intrinsicValue - $scope.purchasedPrice) / intrinsicValue
+      var o = {
+        payoutRatioPercentage: payoutRatio * 100,
+        requiredReturn: requiredReturn,
+        intrinsicValue: intrinsicValue,
+        currentMarginOfSafety: currentMarginOfSafety,
+        purchasedMarginOfSafety: purchasedMarginOfSafety
+      }
+      records.push(o)
+      indexedRecords[o.requiredReturn] = o
+    }
+    var ndx = crossfilter(records)
+    $scope.theDimension = ndx.dimension(function (d) {
+      return d.requiredReturn
+    })
+    $scope.theGroup = $scope.theDimension.group().reduceSum(function (d) {
+      return d.intrinsicValue
+    })
+    $scope.hoveredRequiredReturn = 9 // FIXME set default RR
+    $scope.chartPostSetup = function (theChart, _) {
+      var dotRadius = 5
+      theChart.title(function (d) {
+        var roundedValue = Math.round(d.value * 100) / 100
+        var strRoundedValue = '' + roundedValue
+        if (/\.\d$/.test(strRoundedValue)) {
+          strRoundedValue += '0'
+        }
+        return d.key + '% = $' + strRoundedValue
+      })
+      .yAxisPadding('10%')
+      .renderDataPoints({
+        fillOpacity: 0.8,
+        strokeOpacity: 0.8,
+        radius: dotRadius
+      })
+      .dotRadius(dotRadius * 1.4)
+      .width(document.getElementById('chart-container').clientWidth)
+      .on('renderlet', function (chart) {
+        chart.selectAll('circle').on('mouseover', function (d) {
+          $scope.hoveredRequiredReturn = d.x
+          $scope.$apply()
+        })
+        var lastXValue = chart.x().range()[chart.x().range().length-1]
+        var secondLastXValue = chart.x().range()[chart.x().range().length-2]
+        var rightX = lastXValue + (lastXValue - secondLastXValue)
+        var extra_data = [
+          {x: 0,      y: chart.y()($scope.currentSharePrice)},
+          {x: rightX, y: chart.y()($scope.currentSharePrice)}
+        ]
+        var line = d3.svg.line()
+          .x(function(d) { return d.x })
+          .y(function(d) { return d.y })
+          .interpolate('linear')
+        var chartBody = chart.select('g.chart-body')
+        var path = chartBody.selectAll('path.extra').data([extra_data])
+        path.enter().append('path').attr({
+          stroke: 'red',
+          'stroke-width': '2px',
+          id: 'extra-line'
+        })
+        path.attr('d', line)
+        var text = chartBody.selectAll('text.extra-label').data([0])
+        text.enter()
+          .append('text').attr({
+            'text-anchor': 'middle',
+            transform: 'translate(-0, -7)'
+          })
+          .append('textPath').attr({
+            class: 'extra-label',
+            'xlink:href': '#extra-line',
+            startOffset: '80%'
+          })
+          .text('Current market price ($' + $scope.currentSharePrice + ')')
+      })
+    }
   }
   $scope.annualDividends = 2.722
   $scope.annualDividendsConfig = {

@@ -7,6 +7,7 @@
   <title>Intrinsic value calculator for stocks</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/dc/2.1.8/dc.css"/>
   <link rel="stylesheet" href="styles.css">
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 </head>
@@ -37,8 +38,10 @@
 
   <div class="container" ng-controller="TheController">
     <div class="row">
+      <div class="col-md-12">
+          <h2>Inputs</h2>
+      </div>
       <div class="col-md-6">
-        <h2>Inputs</h2>
         <form class="form-horizontal">
           <ivc-input ivc-model="annualDividends" ivc-config="annualDividendsConfig"></ivc-input>
           <ivc-input ivc-model="frankingPercentage" ivc-config="frankingPercentageConfig"></ivc-input>
@@ -46,16 +49,17 @@
           <ivc-input ivc-model="changeInReserves" ivc-config="changeInReservesConfig"></ivc-input>
           <ivc-input ivc-model="abnormals" ivc-config="abnormalsConfig"></ivc-input>
           <ivc-input ivc-model="openingEquity" ivc-config="openingEquityConfig"></ivc-input>
+        </form>
+      </div>
+      <div class="col-md-6">
+        <form class="form-horizontal">
           <ivc-input ivc-model="newNetOrdinaryEquity" ivc-config="newNetOrdinaryEquityConfig"></ivc-input>
-          <ivc-input ivc-model="requiredReturn" ivc-config="requiredReturnConfig"></ivc-input>
           <ivc-input ivc-model="closingEquity" ivc-config="closingEquityConfig"></ivc-input>
           <ivc-input ivc-model="outstandingShares" ivc-config="outstandingSharesConfig"></ivc-input>
           <ivc-input ivc-model="currentSharePrice" ivc-config="currentSharePriceConfig"></ivc-input>
           <ivc-input ivc-model="purchasedPrice" ivc-config="purchasedPriceConfig"></ivc-input>
         </form>
-      </div>
-      <div class="col-md-6">
-        <h2>Working</h2>
+        <!-- <h2>Working</h2>
         <table class="table table-striped">
           <tbody>
             <tr>
@@ -103,36 +107,69 @@
               <td>${{equityPerShare | number:2}}</td>
             </tr>
           </tbody>
-        </table>
+        </table> -->
+      </div>
+      <div class="col-md-12">
         <div class="result-container">
           <h2>Results</h2>
           <table class="table table-striped">
             <tbody>
               <tr class="main-value">
                 <th>Intrinsic value</th>
-                <td ng-show="isInputValid()">${{intrinsicValue | number:2}}</td>
+                <td ng-show="isInputValid()">${{getIntrinsicValue() | number:2}}</td>
                 <td ng-hide="isInputValid()">$-.--</td>
               </tr>
               <tr>
                 <th>Current margin of safety</th>
                 <td ng-show="isInputValid()"
-                    ng-class="{'good-result': isCurrentMarginOfSafetyPositive, 'bad-result': !isCurrentMarginOfSafetyPositive}">
-                  {{currentMarginOfSafety * 100 | number:2}}%
+                    ng-class="{'good-result': isCurrentMarginOfSafetyPositive(), 'bad-result': !isCurrentMarginOfSafetyPositive()}">
+                  {{getCurrentMarginOfSafety() * 100 | number:2}}%
                 </td>
                 <td ng-hide="isInputValid()">--%</td>
               </tr>
               <tr>
                 <th>Purchased margin of safety</th>
                 <td ng-show="isInputValid()"
-                    ng-class="{'good-result': isPurchasedMarginOfSafetyPositive, 'bad-result': !isPurchasedMarginOfSafetyPositive}">
-                  {{purchasedMarginOfSafety * 100 | number:2}}%
+                    ng-class="{'good-result': isPurchasedMarginOfSafetyPositive(), 'bad-result': !isPurchasedMarginOfSafetyPositive()}">
+                  {{getPurchasedMarginOfSafety() * 100 | number:2}}%
                 </td>
                 <td ng-hide="isInputValid()">--%</td>
               </tr>
             </tbody>
           </table>
         </div>
-        <!-- <p>TODO add result chart</p> -->
+        <div id="chart-container">
+          <div dc-chart="lineChart" ng-if="theDimension"
+            dc-height="480"
+            dc-x="d3.scale.ordinal()"
+            dc-x-units="dc.units.ordinal"
+            dc-x-axis-label="'Required return (%)'"
+            dc-brush-on="false"
+            dc-render-horizontal-grid-lines="true"
+            dc-dimension="theDimension"
+            dc-group="theGroup"
+            dc-y-axis-label="'Intrinsic value ($)'"
+            dc-post-setup-chart="chartPostSetup">
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Required return</th>
+              <th>Intrinsic value</th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="curr in resultRecords">
+              <td>{{curr.requiredReturn}}%</td>
+              <td>${{indexedRecords[curr.requiredReturn].intrinsicValue | number:2}}</td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
@@ -144,7 +181,12 @@
     </footer>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.6/angular.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/crossfilter2/1.3.14/crossfilter.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/dc/2.1.8/dc.min.js"></script>
+  <script src="https://cdn.rawgit.com/tomsaleeba/angular-dc/d8bc2fbd/dist/angular-dc.min.js"></script>
   <script src="app.js"></script>
   <script>
     (function (i, s, o, g, r, a, m) {
