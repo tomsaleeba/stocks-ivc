@@ -22,3 +22,8 @@
   border-radius: 10px;
   background-color: #EEE;
 }
+
+.numeric-cell {
+  font-family: monospace;
+  text-align: right;
+}

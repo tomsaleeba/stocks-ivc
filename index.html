@@ -59,55 +59,24 @@
           <ivc-input ivc-model="currentSharePrice" ivc-config="currentSharePriceConfig"></ivc-input>
           <ivc-input ivc-model="purchasedPrice" ivc-config="purchasedPriceConfig"></ivc-input>
         </form>
-        <!-- <h2>Working</h2>
-        <table class="table table-striped">
-          <tbody>
-            <tr>
-              <th>Grossed-up dividends</th>
-              <td>M${{grossedUpDivs | number:2}}</td>
-            </tr>
-            <tr>
-              <th>Normalised earnings</th>
-              <td>M${{normalisedEarnings | number:2}}</td>
-            </tr>
-            <tr>
-              <th>Net return on equity (NROE)</th>
-              <td>{{nroe * 100 | number:2}}%</td>
-            </tr>
-            <tr>
-              <th>Payout ratio</th>
-              <td>{{payoutRatio | number:4}}</td>
-            </tr>
-            <tr>
-              <th>Payout ratio (percentage)</th>
-              <td>{{payoutRatioPercentage | number:2}}%</td>
-            </tr>
-            <tr>
-              <th>Bond component</th>
-              <td>{{bondComponent | number:2}}</td>
-            </tr>
-            <tr>
-              <th>Growth component</th>
-              <td>{{growthComponent | number:2}}</td>
-            </tr>
-            <tr>
-              <th>Adjusted bond component</th>
-              <td>{{adjustedBondComponent | number:2}}</td>
-            </tr>
-            <tr>
-              <th>Adjusted growth component</th>
-              <td>{{adjustedGrowthComponent | number:2}}</td>
-            </tr>
-            <tr>
-              <th>Equity multiplier</th>
-              <td>{{equityMultiplier | number:2}}</td>
-            </tr>
-            <tr>
-              <th>Equity per share</th>
-              <td>${{equityPerShare | number:2}}</td>
-            </tr>
-          </tbody>
-        </table> -->
+      </div>
+      <div class="col-md-12">
+        <!-- TODO redraw chart on doCalc() -->
+        <h2>Charted results</h2>
+        <div id="chart-container">
+          <div dc-chart="lineChart" ng-if="theDimension"
+            dc-height="480"
+            dc-x="d3.scale.ordinal()"
+            dc-x-units="dc.units.ordinal"
+            dc-x-axis-label="'Required return (%)'"
+            dc-brush-on="false"
+            dc-render-horizontal-grid-lines="true"
+            dc-dimension="theDimension"
+            dc-group="theGroup"
+            dc-y-axis-label="'Intrinsic value ($)'"
+            dc-post-setup-chart="chartPostSetup">
+          </div>
+        </div>
       </div>
       <div class="col-md-12">
         <div class="result-container">
@@ -116,7 +85,7 @@
             <tbody>
               <tr class="main-value">
                 <th>Intrinsic value</th>
-                <td ng-show="isInputValid()">${{getIntrinsicValue() | number:2}}</td>
+                <td ng-show="isInputValid()">${{getIntrinsicValue() | number:2}} (at {{getRequiredReturn()}}% required return)</td>
                 <td ng-hide="isInputValid()">$-.--</td>
               </tr>
               <tr>
@@ -138,35 +107,47 @@
             </tbody>
           </table>
         </div>
-        <div id="chart-container">
-          <div dc-chart="lineChart" ng-if="theDimension"
-            dc-height="480"
-            dc-x="d3.scale.ordinal()"
-            dc-x-units="dc.units.ordinal"
-            dc-x-axis-label="'Required return (%)'"
-            dc-brush-on="false"
-            dc-render-horizontal-grid-lines="true"
-            dc-dimension="theDimension"
-            dc-group="theGroup"
-            dc-y-axis-label="'Intrinsic value ($)'"
-            dc-post-setup-chart="chartPostSetup">
-          </div>
-        </div>
-        <table>
+      </div>
+      <div class="col-md-12">
+        <h2>Tabular results</h2>
+        <table class="table">
           <thead>
             <tr>
-              <th>Required return</th>
-              <th>Intrinsic value</th>
-              <th></th>
-              <th></th>
+              <th class="text-right">Required return</th>
+              <th class="text-right">Intrinsic value</th>
+              <th class="text-right">Current margin of safety</th>
+              <th class="text-right">Purchased margin of safety</th>
+              <!-- TODO add all workings, probably with a switch to opt-in -->
+              <!-- <th>Grossed-up dividends</th>
+              <th>Normalised earnings</th>
+              <th>Net return on equity (NROE)</th>
+              <th>Payout ratio</th>
+              <th>Payout ratio (percentage)</th>
+              <th>Bond component</th>
+              <th>Growth component</th>
+              <th>Adjusted bond component</th>
+              <th>Adjusted growth component</th>
+              <th>Equity multiplier</th>
+              <th>Equity per share</th> -->
             </tr>
           </thead>
           <tbody>
             <tr ng-repeat="curr in resultRecords">
-              <td>{{curr.requiredReturn}}%</td>
-              <td>${{indexedRecords[curr.requiredReturn].intrinsicValue | number:2}}</td>
-              <td></td>
-              <td></td>
+              <td class="numeric-cell">{{curr.requiredReturn}}%</td>
+              <td class="numeric-cell">${{indexedRecords[curr.requiredReturn].intrinsicValue | number:2}}</td>
+              <td class="numeric-cell">{{curr.currentMarginOfSafety * 100 | number:2}}%</td>
+              <td class="numeric-cell">{{curr.purchasedMarginOfSafety * 100 | number:2}}%</td>
+              <!-- <td>M${{grossedUpDivs | number:2}}</td>
+              <td>M${{normalisedEarnings | number:2}}</td>
+              <td>{{nroe * 100 | number:2}}%</td>
+              <td>{{payoutRatio | number:4}}</td>
+              <td>{{payoutRatioPercentage | number:2}}%</td>
+              <td>{{bondComponent | number:2}}</td>
+              <td>{{growthComponent | number:2}}</td>
+              <td>{{adjustedBondComponent | number:2}}</td>
+              <td>{{adjustedGrowthComponent | number:2}}</td>
+              <td>{{equityMultiplier | number:2}}</td>
+              <td>${{equityPerShare | number:2}}</td> -->
             </tr>
           </tbody>
         </table>

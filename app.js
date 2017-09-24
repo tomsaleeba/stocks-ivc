@@ -39,6 +39,9 @@ app.controller('TheController', function ($scope) {
   $scope.isPurchasedMarginOfSafetyPositive = function () {
     return $scope.getPurchasedMarginOfSafety() > 0
   }
+  $scope.getRequiredReturn = function () {
+    return getValueForHoveredRR('requiredReturn')
+  }
   function getValueForHoveredRR (fieldName) {
     if (!$scope.resultRecords) {
       return 0
