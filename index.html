@@ -60,6 +60,9 @@
           <ivc-input ivc-model="purchasedPrice" ivc-config="purchasedPriceConfig"></ivc-input>
         </form>
       </div>
+      <div class="col-xs-12 text-center text-muted">
+        Scroll down to see results \/
+      </div>
       <div class="col-md-12">
         <!-- TODO redraw chart on doCalc() -->
         <h2>Charted results</h2>
@@ -78,14 +81,15 @@
           </div>
         </div>
       </div>
-      <div class="col-md-12">
+      <div class="col-md-8 col-md-offset-2">
         <div class="result-container">
-          <h2>Results</h2>
+          <h2 class="text-center">Results</h2>
+          <p class="text-muted text-center">Hover over a point in the chart to see the figures at that point.</p>
           <table class="table table-striped">
             <tbody>
               <tr class="main-value">
                 <th>Intrinsic value</th>
-                <td ng-show="isInputValid()">${{getIntrinsicValue() | number:2}} (at {{getRequiredReturn()}}% required return)</td>
+                <td ng-show="isInputValid()">${{getIntrinsicValue() | number:2}} <small>(at {{getRequiredReturn()}}% required return)</small></td>
                 <td ng-hide="isInputValid()">$-.--</td>
               </tr>
               <tr>
@@ -109,48 +113,56 @@
         </div>
       </div>
       <div class="col-md-12">
-        <h2>Tabular results</h2>
-        <table class="table">
-          <thead>
-            <tr>
-              <th class="text-right">Required return</th>
-              <th class="text-right">Intrinsic value</th>
-              <th class="text-right">Current margin of safety</th>
-              <th class="text-right">Purchased margin of safety</th>
-              <!-- TODO add all workings, probably with a switch to opt-in -->
-              <!-- <th>Grossed-up dividends</th>
-              <th>Normalised earnings</th>
-              <th>Net return on equity (NROE)</th>
-              <th>Payout ratio</th>
-              <th>Payout ratio (percentage)</th>
-              <th>Bond component</th>
-              <th>Growth component</th>
-              <th>Adjusted bond component</th>
-              <th>Adjusted growth component</th>
-              <th>Equity multiplier</th>
-              <th>Equity per share</th> -->
-            </tr>
-          </thead>
-          <tbody>
-            <tr ng-repeat="curr in resultRecords">
-              <td class="numeric-cell">{{curr.requiredReturn}}%</td>
-              <td class="numeric-cell">${{indexedRecords[curr.requiredReturn].intrinsicValue | number:2}}</td>
-              <td class="numeric-cell">{{curr.currentMarginOfSafety * 100 | number:2}}%</td>
-              <td class="numeric-cell">{{curr.purchasedMarginOfSafety * 100 | number:2}}%</td>
-              <!-- <td>M${{grossedUpDivs | number:2}}</td>
-              <td>M${{normalisedEarnings | number:2}}</td>
-              <td>{{nroe * 100 | number:2}}%</td>
-              <td>{{payoutRatio | number:4}}</td>
-              <td>{{payoutRatioPercentage | number:2}}%</td>
-              <td>{{bondComponent | number:2}}</td>
-              <td>{{growthComponent | number:2}}</td>
-              <td>{{adjustedBondComponent | number:2}}</td>
-              <td>{{adjustedGrowthComponent | number:2}}</td>
-              <td>{{equityMultiplier | number:2}}</td>
-              <td>${{equityPerShare | number:2}}</td> -->
-            </tr>
-          </tbody>
-        </table>
+        <a class="btn btn-link"
+            ng-init="hideTable = true"
+            ng-show="hideTable"
+            ng-click="hideTable = false">
+          Show full table of workings
+        </a>
+        <div ng-hide="hideTable">
+          <h2>Tabular results</h2>
+          <table class="table">
+            <thead>
+              <tr>
+                <th class="text-right">Required return</th>
+                <th class="text-right">Intrinsic value</th>
+                <th class="text-right">Current margin of safety</th>
+                <th class="text-right">Purchased margin of safety</th>
+                <th class="text-right">Grossed-up dividends</th>
+                <th class="text-right">Normalised earnings</th>
+                <th class="text-right">Net return on equity (NROE)</th>
+                <th class="text-right">Payout ratio</th>
+                <th class="text-right">Payout ratio (percentage)</th>
+                <th class="text-right">Bond component</th>
+                <th class="text-right">Growth component</th>
+                <th class="text-right">Adjusted bond component</th>
+                <th class="text-right">Adjusted growth component</th>
+                <th class="text-right">Equity multiplier</th>
+                <th class="text-right">Equity per share</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="curr in resultRecords">
+                <td class="numeric-cell">{{curr.requiredReturn}}%</td>
+                <td class="numeric-cell">${{indexedRecords[curr.requiredReturn].intrinsicValue | number:2}}</td>
+                <!-- do we use indexedRecords for evertyhing for create helper getters? -->
+                <td class="numeric-cell">{{curr.currentMarginOfSafety * 100 | number:2}}%</td>
+                <td class="numeric-cell">{{curr.purchasedMarginOfSafety * 100 | number:2}}%</td>
+                <td class="numeric-cell">M${{curr.grossedUpDivs | number:2}}</td>
+                <td class="numeric-cell">M${{curr.normalisedEarnings | number:2}}</td>
+                <td class="numeric-cell">{{curr.nroe * 100 | number:2}}%</td>
+                <td class="numeric-cell">{{curr.payoutRatio | number:4}}</td>
+                <td class="numeric-cell">{{curr.payoutRatioPercentage | number:2}}%</td>
+                <td class="numeric-cell">{{curr.bondComponent | number:2}}</td>
+                <td class="numeric-cell">{{curr.growthComponent | number:2}}</td>
+                <td class="numeric-cell">{{curr.adjustedBondComponent | number:2}}</td>
+                <td class="numeric-cell">{{curr.adjustedGrowthComponent | number:2}}</td>
+                <td class="numeric-cell">{{curr.equityMultiplier | number:2}}</td>
+                <td class="numeric-cell">${{curr.equityPerShare | number:2}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 

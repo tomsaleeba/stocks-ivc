@@ -76,11 +76,21 @@ app.controller('TheController', function ($scope) {
       currentMarginOfSafety = (intrinsicValue - $scope.currentSharePrice) / intrinsicValue
       purchasedMarginOfSafety = (intrinsicValue - $scope.purchasedPrice) / intrinsicValue
       var o = {
-        payoutRatioPercentage: payoutRatio * 100,
         requiredReturn: requiredReturn,
+        grossedUpDivs: grossedUpDivs,
+        normalisedEarnings: normalisedEarnings,
+        nroe: nroe,
+        payoutRatio: payoutRatio,
+        payoutRatioPercentage: payoutRatio * 100,
+        bondComponent: bondComponent,
+        growthComponent: growthComponent,
+        adjustedBondComponent: adjustedBondComponent,
+        adjustedGrowthComponent: adjustedGrowthComponent,
+        equityMultiplier: equityMultiplier,
+        equityPerShare: equityPerShare,
         intrinsicValue: intrinsicValue,
         currentMarginOfSafety: currentMarginOfSafety,
-        purchasedMarginOfSafety: purchasedMarginOfSafety
+        purchasedMarginOfSafety: purchasedMarginOfSafety,
       }
       records.push(o)
       indexedRecords[o.requiredReturn] = o
